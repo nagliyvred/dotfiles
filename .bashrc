@@ -186,18 +186,9 @@ PROMPT_COMMAND=prompt_command
 export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/scala/bin:$PATH
 # Finished adapting your PATH environment variable for use with MacPorts.
 
-export FORKLIFT_BASE=/Users/edudin/tower/forklift-app/
-export FORKLIFT_HOME=$FORKLIFT_BASE/release/
-export RMI_SERVER_URL=localhost
-export FKL_RMI_PORT=1099
-export FKL_RMI_HOST=localhost
-export JAVA_HOME=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/
-export FKL_DB_HOST=10.0.0.190
-export FKL_DB_PORT=1521
-export FKL_DB_SID=MVD
-export FKL_DB_USER=build
-export FKL_DB_PASSWD=build
-
+if [ -f bash_env.sh ]; then
+    source bash_env.sh
+fi
 
 if [ -f /opt/local/etc/bash_completion ]; then
     . /opt/local/etc/bash_completion
