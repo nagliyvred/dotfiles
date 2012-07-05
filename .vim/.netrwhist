@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/Users/edudin/tw/nbn/nbn-deployments-gem'
+let g:netrw_dirhist_2='/Users/edudin/tw/nbn/scala-spike'
+let g:netrw_dirhist_3='/Users/edudin/tw/nbn/scala-spike/src/main'
+let g:netrw_dirhist_4='/Users/edudin/tw/nbn/ass/assurance-environment-configuration/puppet/manifests/nodes'
