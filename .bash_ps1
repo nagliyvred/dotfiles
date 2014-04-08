@@ -1,0 +1,78 @@
+#!/bin/bash
+
+USER=`whoami`
+if [ $LOGNAME = $USER ] ; then
+  COLOUR=44
+else
+  COLOUR=45
+fi
+
+if [ $USER = 'root' ] ; then
+  COLOUR=41
+fi
+
+# setup color variables
+color_is_on=
+color_red=
+color_green=
+color_yellow=
+color_blue=
+color_white=
+color_gray=
+color_bg_red=
+color_off=
+if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    color_is_on=true
+    color_red="\[$(/usr/bin/tput setaf 1)\]"
+    color_green="\[$(/usr/bin/tput setaf 2)\]"
+    color_yellow="\[$(/usr/bin/tput setaf 3)\]"
+    color_blue="\[$(/usr/bin/tput setaf 4)\]"
+    color_white="\[$(/usr/bin/tput setaf 7)\]"
+    color_gray="\[$(/usr/bin/tput setaf 8)\]"
+    color_off="\[$(/usr/bin/tput sgr0)\]"
+
+    color_error="$(/usr/bin/tput setab 1)$(/usr/bin/tput setaf 7)"
+    color_error_off="$(/usr/bin/tput sgr0)"
+
+    # set user color
+    case `id -u` in
+        0) color_user=$color_red ;;
+        *) color_user=$color_green ;;
+    esac
+fi
+
+# some kind of optimization - check if git installed only on config load
+PS1_GIT_BIN=$(which git 2>/dev/null)
+
+function prompt_command {
+    local PS1_GIT=
+    local PWDNAME=$PWD
+
+    # get cursor position and add new line if we're not in first column
+    #exec < /dev/tty
+    #local OLDSTTY=$(stty -g)
+    #stty raw -echo min -1
+    #echo -en "\033[6n" > /dev/tty && read -sdR CURPOS
+    #stty $OLDSTTY
+    #[[ ${CURPOS##*;} -gt 1 ]] && echo "${color_error}↵${color_error_off}"
+
+    echo -en "\033[6n" && read -sdR CURPOS
+    [[ ${CURPOS##*;} -gt 1 ]] && echo "${color_error}↵${color_error_off}"
+    
+    # beautify working firectory name
+    if [ "$HOME" == "$PWD" ]; then
+        PWDNAME="~"
+    elif [ "$HOME" ==  "${PWD:0:${#HOME}}" ]; then
+        PWDNAME="~${PWD:${#HOME}}"
+    fi
+
+    # set title
+    echo -ne "\033]0;${USER}@${HOSTNAME}:${PWDNAME}"; echo -ne "\007"
+
+    # set new color prompt
+    PS1="${color_user}${USER}${color_off}@${color_yellow}${HOSTNAME}${color_off}:${color_blue}${PWDNAME}${color_off}${PS1_GIT}\n➜ "
+
+}
+PROMPT_COMMAND=prompt_command
+
+
